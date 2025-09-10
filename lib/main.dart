@@ -1,5 +1,4 @@
-// import 'dart:ffi';
-// import 'dart:ui';
+import 'dart:html';
 
 import 'package:flutter/material.dart';
 
@@ -76,7 +75,7 @@ class _MyStatefulPageState extends State<MyStatefulPage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: (isLightTheme) ? Colors.white : Colors.black,
+        backgroundColor: (isLightTheme) ? Color(0xFFF5F5F5) : Color(0xFF121212),
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
@@ -87,30 +86,36 @@ class _MyStatefulPageState extends State<MyStatefulPage> {
           icon: (isLightTheme)
               ? Icon(
                   Icons.wb_sunny,
-                  color: (isLightTheme) ? Colors.black : Colors.white,
+                  color: (isLightTheme) ? Color(0xFF424242) : Color(0xFFE0E0E0),
                 )
               : Icon(
                   Icons.nightlight,
-                  color: (isLightTheme) ? Colors.black : Colors.white,
+                  color: (isLightTheme) ? Color(0xFF424242) : Color(0xFFE0E0E0),
                 ),
         ),
         title: Text(getAppBarTitle(),
             style: TextStyle(
-                color: (isLightTheme) ? Colors.black : Colors.white,
+                color: (isLightTheme) ? Color(0xFF424242) : Color(0xFFE0E0E0),
                 fontWeight: FontWeight.bold)),
         actions: [
           IconButton(
               onPressed: () {},
               icon: Icon(Icons.settings,
-                  color: (isLightTheme) ? Colors.black : Colors.white))
+                  color:
+                      (isLightTheme) ? Color(0xFF424242) : Color(0xFFE0E0E0))),
+          SizedBox(
+            width: 5,
+          )
         ],
       ),
       body: _widgetList[_currentPageIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: (isLightTheme) ? Colors.black : Colors.orange,
-        unselectedItemColor: (isLightTheme) ? Colors.grey : Colors.white,
-        backgroundColor: (isLightTheme) ? Colors.white : Colors.black,
+        backgroundColor: (isLightTheme) ? Color(0xFFF5F5F5) : Color(0xFF121212),
+        unselectedItemColor:
+            (isLightTheme) ? Color(0xFF424242) : Color(0xFFE0E0E0),
+        selectedItemColor:
+            (isLightTheme) ? Color(0xFF4CAF50) : Color(0xFFFF9800),
         currentIndex: _currentPageIndex,
         items: [
           BottomNavigationBarItem(
@@ -119,7 +124,7 @@ class _MyStatefulPageState extends State<MyStatefulPage> {
           ),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: "search"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.memory, size: 35), label: "memory"),
+              icon: Icon(Icons.memory, size: 32), label: "memory"),
           BottomNavigationBarItem(
               icon: Icon(Icons.chat_bubble_outline), label: "chat"),
           BottomNavigationBarItem(
