@@ -34,25 +34,13 @@ class _MyStatefulPageState extends State<MyStatefulPage> {
         child: IconButton(onPressed: () {
           showDialog(context: context, builder: (BuildContext context) {
             return AlertDialog(
-              content: Container(
-                width: 250,
-                height: 100,
-                child: Stack(
-                  children: [
-                    Column(
-                      children: [
-                        Text("알림"),
-                        Text("이거 알림임 ㅅㄱ")
-                      ],
-                    ),
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      child: IconButton(onPressed: () {Navigator.of(context).pop();}, icon: Icon(Icons.close)),
-                    )
-                  ],
-                ),
-              ),
+              title: Text("Title"),
+              content: Text("내용들"),
+              actions: [
+                TextButton(onPressed: () {
+                  Navigator.of(context).pop();
+                }, child: Text("닫기"))
+              ],
             );
           },);
         }, icon: Icon(Icons.info)),
