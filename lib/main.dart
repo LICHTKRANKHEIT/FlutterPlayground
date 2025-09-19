@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 
 void main() {
@@ -26,18 +24,36 @@ class MyStatefulPage extends StatefulWidget {
 }
 
 class _MyStatefulPageState extends State<MyStatefulPage> {
-  bool isLightTheme = true;
-
   int _currentPageIndex = 0;
+
+  double _rotationTurns = 0.0; // 1이 360도. 따라서 "~바퀴를 회전"이 됨
+  double _rotationSettingIconTurns = 0.0;
+
+  bool isLightTheme = false;
 
   void showCurrentPapge(int index) {
     setState(() {
       _currentPageIndex = index;
+      if (_currentPageIndex == 2) {
+        _rotationSettingIconTurns += 0.25;
+      }
+    });
+  }
+
+  void _rotateIcon() {
+    setState(() {
+      _rotationTurns += 0.25;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final userInterfaceSize = MediaQuery.of(context).size;
+
+    final double userInterfaceWidth = userInterfaceSize.width;
+
+    final double userInterfaceHeight = userInterfaceSize.height;
+
     List<Widget> _widgetList = [
       Container(
         color: (isLightTheme) ? Colors.white : Colors.black,
@@ -79,30 +95,101 @@ class _MyStatefulPageState extends State<MyStatefulPage> {
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
-            setState(() {
-              (isLightTheme) ? isLightTheme = false : isLightTheme = true;
-            });
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                      backgroundColor: (isLightTheme)
+                          ? Color(0xFFE0E0E0)
+                          : Color(0xFF121212),
+                      title: Text("SET THEME",
+                          style: TextStyle(
+                              color: (isLightTheme)
+                                  ? Color(0xFF424242)
+                                  : Color(0xFFE0E0E0))),
+                      content: FractionallySizedBox(
+                        heightFactor: 0.12,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "테마를 변경하시겠어요? " +
+                                  ((isLightTheme)
+                                      ? "(to dark theme)"
+                                      : "(to light theme)"),
+                              style: TextStyle(
+                                  color: (isLightTheme)
+                                      ? Color(0xFF424242)
+                                      : Color(0xFFE0E0E0)),
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: OutlinedButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          isLightTheme = !isLightTheme;
+                                        });
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text(
+                                        "yes",
+                                        style: TextStyle(
+                                            color: (isLightTheme)
+                                                ? Color(0xFF424242)
+                                                : Color(0xFFE0E0E0)),
+                                      )),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Expanded(
+                                    child: OutlinedButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text(
+                                          "no",
+                                          style: TextStyle(
+                                              color: (isLightTheme)
+                                                  ? Color(0xFF424242)
+                                                  : Color(0xFFE0E0E0)),
+                                        )))
+                              ],
+                            )
+                          ],
+                        ),
+                      ));
+                });
           },
           icon: (isLightTheme)
               ? Icon(
                   Icons.wb_sunny,
-                  color: (isLightTheme) ? Color(0xFF424242) : Color(0xFFE0E0E0),
+                  color: Color(0xFF424242),
                 )
               : Icon(
                   Icons.nightlight,
-                  color: (isLightTheme) ? Color(0xFF424242) : Color(0xFFE0E0E0),
+                  color: Color(0xFFE0E0E0),
                 ),
         ),
         title: Text(getAppBarTitle(),
             style: TextStyle(
                 color: (isLightTheme) ? Color(0xFF424242) : Color(0xFFE0E0E0),
-                fontWeight: FontWeight.bold)),
+                fontWeight: FontWeight.bold,
+                fontSize: 20)),
         actions: [
           IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.settings,
-                  color:
-                      (isLightTheme) ? Color(0xFF424242) : Color(0xFFE0E0E0))),
+              onPressed: () {
+                _rotateIcon();
+              },
+              icon: AnimatedRotation(
+                turns: _rotationTurns,
+                duration: Duration(milliseconds: 170),
+                child: Icon(Icons.settings,
+                    color:
+                        (isLightTheme) ? Color(0xFF424242) : Color(0xFFE0E0E0)),
+              )),
           SizedBox(
             width: 5,
           )
@@ -124,9 +211,16 @@ class _MyStatefulPageState extends State<MyStatefulPage> {
           ),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: "search"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.memory, size: 32), label: "memory"),
+              icon: AnimatedRotation(
+                  turns: _rotationSettingIconTurns,
+                  duration: Duration(milliseconds: 200),
+                  child: Icon(Icons.memory, size: 32)),
+              label: "memory"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.chat_bubble_outline), label: "chat"),
+              icon: (_currentPageIndex == 3)
+                  ? Icon(Icons.chat)
+                  : Icon(Icons.chat_bubble_outline),
+              label: "chat"),
           BottomNavigationBarItem(
               icon: Icon(Icons.account_circle), label: "profile"),
         ],
